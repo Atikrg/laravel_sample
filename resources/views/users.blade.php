@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
 </head>
 
 <body>
@@ -13,6 +13,8 @@
         <div class="header">
             <h1>CRUD OPERATIONS</h1>
             <br>
+
+
         </div>
         <form class="crud_form" method="POST">
             <br>
@@ -47,6 +49,12 @@
     <hr />
 
     <div class="container-2 list">
+        @if(Session::has('success'))
+        <div class="alert alert-success">
+            {{ Session::get('success') }}
+        </div>
+        @endif
+
         <table class="table">
             <tr>
                 <th class="text-uppercase">id</th>
@@ -54,27 +62,48 @@
                 <th class="text-uppercase">email</th>
                 <th class="text-uppercase">password</th>
                 <th class="text-uppercase">favourite number</th>
-                <th class="text-uppercase">Actions</th>
+                <th class="text-uppercase" colspan="2">Actions</th>
 
             </tr>
+            @if($users->isNotEmpty())
+            @foreach($users as $user)
+            <tr class="users_id-{{ $user->id }}">
+                <td>{{ $user->id }}</td>
+                <td>{{ $user->full_name }}</td>
+                <td>{{ $user->email }}</td>
+                <td>{{ $user->password }}</td>
+                <td>{{ $user->number }}</td>
+                
+                    <td><a href="#" onclick="deleteUser({{ $user->id }})" class="btn btn-danger btn-sm">DELETE</a>
+                        <form id="user-delete-{{$user->id}}" action="{{ route('users.destroy', $user->id) }}" method="post">
+                            @csrf
+                            @method('delete')
+                        </form>
+                    </td>
+                    <td>
+                    <button class="btn btn-info text-white btn-sm">EDIT</button> 
+    
+                    </td>
+
+                
+
+            </tr>
+
+            @endforeach
+            @else
             <tr>
-                <td>1</td>
-                <td>Atik Salim Rangnkar</td>
-                <td>atikrangnekar28@gmail.com</td>
-                <td>76292026</td>
-                <td>0102</td>
-                <td>
-                    <button class="btn btn-danger">DELETE</button>
-                    <button class="btn btn-info text-white">EDIT</button>
-                </td>
-
+                <td colspan="6">No users found.</td>
             </tr>
+            @endif
 
 
 
         </table>
 
-       
+        <div class="paginate">
+            {{$users->links()}}
+
+        </div>
     </div>
 
 </body>
@@ -82,11 +111,16 @@
 </html>
 
 <style>
-    .spinner-border{
+    .spinner-border {
         display: none;
         position: absolute;
         margin-left: 45%;
     }
+
+    .paginate {
+        margin: 12px;
+    }
+
     .container {
         display: flex;
         flex-direction: column;
@@ -102,3 +136,16 @@
         justify-content: space-between;
     }
 </style>
+
+
+<script>
+ function deleteUser(id) {
+        if (confirm("Are you sure you want to delete?")) {
+            console.log(document.getElementById('user-delete-' + id));
+          
+                document.getElementById('user-delete-' + id).submit();
+            }
+
+        }
+    
+</script>
