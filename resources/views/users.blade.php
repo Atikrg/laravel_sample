@@ -13,30 +13,33 @@
         <div class="header">
             <h1>CRUD OPERATIONS</h1>
             <br>
+            <button class="btn btn-success text-white btn-sm" id="edit_a_user1">EDIT A USER1</button> 
 
 
         </div>
-        <form class="crud_form" method="POST">
+        <form action = "{{route('users.store')}}" class="crud_form" method="POST">
+        @csrf
+
             <br>
-            <div>
+            <div class="grid gap-3">
                 <div>
-                    <input type="number" name="id" placeholder="Enter id" />
+                    <input type="number" id="id" name="id" placeholder="Enter id" disabled/>
                 </div>
                 <div>
-                    <input type="text" name="full_name" placeholder="Enter your full name" />
+                    <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" />
                 </div>
                 <div>
-                    <input type="email" name="email" placeholder="Enter email" />
+                    <input type="email" id="email" name="email" placeholder="Enter email" />
                 </div>
                 <div>
-                    <input type="password" name="password" placeholder="Enter your password" />
+                    <input type="password" id="password" name="password" placeholder="Enter your password" />
                 </div>
                 <div>
-                    <input type="number" name="number" placeholder="favourite number" />
+                    <input type="number" id="number" name="number" placeholder="favourite number" />
                 </div>
                 <div class="buttons">
                     <div>
-                        <button class="btn btn-outline-primary" type="submit">Submit</button>
+                        <button id="submit_btn" class="btn btn-outline-primary" type="submit">Submit</button>
                     </div>
                     <div>
                         <a href="#">Next</a>
@@ -46,7 +49,7 @@
         </form>
     </div>
 
-    <hr />
+    <div class="shadow-sm p-3 mb-5 bg-body-tertiary rounded"></div>
 
     <div class="container-2 list">
         @if(Session::has('success'))
@@ -75,13 +78,13 @@
                 <td>{{ $user->number }}</td>
                 
                     <td><a href="#" onclick="deleteUser({{ $user->id }})" class="btn btn-danger btn-sm">DELETE</a>
-                        <form id="user-delete-{{$user->id}}" action="{{ route('users.destroy', $user->id) }}" method="post">
+                        <form id="user-delete-{{$user->id}}" action="{{ route('users.destroy', $user->id) }}" method="POST">
                             @csrf
                             @method('delete')
                         </form>
                     </td>
                     <td>
-                    <button class="btn btn-info text-white btn-sm">EDIT</button> 
+                    <button class="btn btn-info text-white btn-sm">EDIT2</button> 
     
                     </td>
 

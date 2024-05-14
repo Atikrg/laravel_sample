@@ -1,0 +1,80 @@
+return redirect()->route('users.index')->withErrors($validator)->withInput();
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route [users.index] not defined.
+
+public function store(Request $request)
+    {
+        $users = new UserModel();
+        $database_id = $users->id;
+        $request_id = $request->id;
+
+
+
+        if ($database_id == $request_id) {
+            Session::flash("success", "ID $database_id already exists.");
+        } else {
+
+            $validator = Validator::make($request->all(), [
+                "full_name" => 'required',
+                "email" => 'required',
+                "number" => 'required',
+                "password" => 'required'
+            ]);
+
+            if ($validator->passes()) {
+                //save data here
+
+                $users->full_name = $request->full_name;
+                $users->email = $request->email;
+                $users->number = $request->number;
+                $users->password = $request->password;
+                $users->save();
+
+                return back()->with('success', 'User created successfully');
+            } else {
+                //return with errors
+
+                return redirect()->route('users.index')->withErrors($validator)->withInput();
+            }
+        }
+    }
+fix this
+public function store(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        "full_name" => 'required',
+        "email" => 'required',
+        "number" => 'required',
+        "password" => 'required'
+    ]);
+
+    if ($validator->passes()) {
+        // Validation passed, proceed with saving data
+        $users = new UserModel();
+        $users->full_name = $request->full_name;
+        $users->email = $request->email;
+        $users->number = $request->number;
+        $users->password = $request->password;
+
+        // Check if ID exists in the database
+        if (UserModel::where('id', $request->id)->exists()) {
+            Session::flash("success", "ID {$request->id} already exists.");
+        } else {
+            // ID does not exist, save the user
+            $users->save();
+            Session::flash('success', 'User created successfully');
+        }
+
+        return back();
+    } else {
+        // Validation failed, return with errors
+        return redirect()->route('users.index')->withErrors($validator)->withInput();
+    }
+}
+
+
+
+public function store(Request $request){
+        $id = $request->id;
+        dd($id);
+    }
